@@ -48,7 +48,7 @@ end
 
 
 function moveopt_rand!(tour::Array{Int64, 1}, dist::Array{Int64, 2}, sets::Array{Any, 1}, 
-				  member::Array{Int64,1}, iters::Int, setdist::Distsv)
+				  member::Array{Int64,1}, iters::Int64, setdist::Distsv)
 	tour_inds = collect(1:length(tour))
 	@inbounds for i = 1:iters # i = rand(1:length(tour), iters)
 		i = incremental_shuffle!(tour_inds, i)
@@ -68,8 +68,8 @@ end
 """
 compute the cost of inserting vertex v into position i of tour
 """
-@inline function insert_cost_lb(tour::Array{Int64,1}, dist::Array{Int64,2}, set::Array{Int64, 1}, setind::Int, 
-						   setdist::Distsv, bestv::Int, bestpos::Int, best_cost::Int)
+@inline function insert_cost_lb(tour::Array{Int64,1}, dist::Array{Int64,2}, set::Array{Int64, 1}, setind::Int64, 
+						   setdist::Distsv, bestv::Int64, bestpos::Int, best_cost::Int64)
     @inbounds for i = 1:length(tour)
 		v1 = prev_tour(tour, i) # first check lower bound
 		lb = setdist.vert_set[v1, setind] + setdist.set_vert[setind, tour[i]] - dist[v1, tour[i]]
@@ -91,7 +91,7 @@ end
 """
 determine the cost of removing the vertex at position i in the tour
 """
-@inline function removal_cost(tour::Array{Int64, 1}, dist::Array{Int64, 2}, i::Int64)
+@inline function removal_cost(tour::Array{Int64, 1}, dist::Array{Int64, 2}, i::Int32)
     if i == 1
         return dist[tour[end], tour[i]] + dist[tour[i], tour[i+1]] - dist[tour[end], tour[i+1]]
     elseif i == length(tour)

@@ -65,7 +65,7 @@ and exponential distribution with lambda = power
 # goes from left of array if power is positive
 # and right of array if it is negative
 """
-function select_k(num::Int64, power::Float64)
+function select_k(num::Int32, power::Float64)
 	base = (1/2)^abs(power)
 	# (1 - base^num)/(1 - base) is sum of geometric series
 	rand_select = (1 - base^num)/(1 - base) * rand()
@@ -151,7 +151,7 @@ function cheapest_insertion!(tour::Array{Int64,1}, sets_to_insert::Array{Int64,1
 	"""
 	while length(sets_to_insert) > 0
         best_cost = typemax(Int64)
-        best_v = 0
+        best_v ::Int64= 0
         best_pos = 0
         best_set = 0
         for i = 1:length(sets_to_insert)
@@ -179,7 +179,7 @@ insertion cost, along with the position of this insertion in the tour.  If
 best_position is i, then vertex should be inserted between tour[i-1] and tour[i].
 """
 @inline function insert_lb(tour::Array{Int64,1}, dist::Array{Int64,2}, set::Array{Int64, 1},
-							setind::Int, setdist::Distsv, noise::Float64)
+							setind::Int64, setdist::Distsv, noise::Float64)
 	best_cost = typemax(Int64)
 	bestv = 0
 	bestpos = 0
@@ -233,7 +233,7 @@ end
 
 """build tour from scratch on a cold restart"""
 function initial_tour!(lowest::Tour, dist::Array{Int64, 2}, sets::Array{Any, 1},
-						setdist::Distsv, trial_num::Int64, param::Dict{Symbol,Any})
+						setdist::Distsv, trial_num::Int32, param::Dict{Symbol,Any})
 	sets_to_insert = collect(1:param[:num_sets])
 	best = Tour(Int64[], typemax(Int64))
 
@@ -291,7 +291,7 @@ tour.  Bias is based on the power input.  Vertices are then selected via pdf sel
 """
 function worst_removal!(tour::Array{Int64,1}, dist::Array{Int64, 2},
 							num_to_remove::Int64, member::Array{Int64,1}, power::Float64)
-    deleted_sets = Array{Int}(undef, 0)
+    deleted_sets = Array{Int64}(undef, 0)
 	while length(deleted_sets) < num_to_remove
 		removal_costs = worst_vertices(tour, dist)
 		ind = pdf_select(removal_costs, power)
@@ -308,7 +308,7 @@ end
 """ removing a single continuos segment of the tour of size num_remove """
 function segment_removal!(tour::Array{Int64, 1}, num_to_remove::Int64, member::Array{Int64,1})
 	i = rand(1:length(tour))
-	deleted_sets = Array{Int}(undef, 0)
+	deleted_sets = Array{Int64}(undef, 0)
 	while length(deleted_sets) < num_to_remove
 		i > length(tour) && (i = 1)
 		push!(deleted_sets, member[tour[i]])
@@ -321,7 +321,7 @@ end
 """  pick a random vertex, and delete its closest neighbors  """
 function distance_removal!(tour::Array{Int64,1}, dist::Array{Int64, 2},
 							   num_to_remove::Int64, member::Array{Int64,1}, power::Float64)
-    deleted_sets = Array{Int}(undef, 0)
+    deleted_sets = Array{Int64}(undef, 0)
     deleted_vertices = Array{Int}(undef, 0)
 
     seed_index = rand(1:length(tour))

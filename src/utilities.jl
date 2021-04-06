@@ -73,7 +73,7 @@ struct Distsv
 end
 
 
-function set_vertex_dist(dist::Array{Int64, 2}, num_sets::Int, member::Array{Int64,1})
+function set_vertex_dist(dist::Array{Int64, 2}, num_sets::Int64, member::Array{Int64,1})
     """
 	Computes the minimum distance between each set and each vertex
 	Also compute the minimum distance from a set to a vertex, ignoring direction
@@ -207,7 +207,7 @@ end
 #####################################################
 #############  Incremental Shuffle ##################
 
-@inline function incremental_shuffle!(a::AbstractVector, i::Int)
+@inline function incremental_shuffle!(a::AbstractVector, i::Int64)
     j = i + floor(Int, rand() * (length(a) + 1 - i))
    	a[j], a[i] = a[i], a[j]
 	return a[i]
@@ -215,7 +215,7 @@ end
 
 
 """ rand_select for randomize over all minimizers """
-@inline function rand_select(a::Array{Int64, 1}, val::Int)
+@inline function rand_select(a::Array{Int64, 1}, val::Int64)
 	inds = Int[]
 	@inbounds for i=1:length(a)
 		a[i] == val && (push!(inds, i))
